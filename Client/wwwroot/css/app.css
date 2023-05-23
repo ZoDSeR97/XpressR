@@ -16,6 +16,23 @@
     font-size: smaller;
 }
 
+.brder {
+    border-bottom: 1px solid black;
+}
+
+.search {
+    width: 260px;
+}
+
+.dsplay {
+    width: 450px;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
