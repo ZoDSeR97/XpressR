@@ -1,0 +1,65 @@
+﻿@page "/registration"
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Nav
+@using XpressR.Shared
+<h3>Registration</h3>
+
+<EditForm Model="user" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator/>
+    <div class="form-floating mb-3">
+        <InputText class="form-control" placeholder="M" aria-describedby="emailHelp" @bind-Value="user.FirstName" />
+        <label for="FirstName" class="form-label">First Name</label>
+        <ValidationMessage For="@(()=>user.FirstName)"/>
+    </div>
+    <div class="form-floating mb-3">
+        <InputText class="form-control" placeholder="L" aria-describedby="emailHelp" @bind-Value="user.LastName" />
+        <label for="LastName" class="form-label">Last Name</label>
+        <ValidationMessage For="@(()=>user.LastName)" />
+    </div>
+    <div class="form-floating mb-3">
+        <InputText type="email" class="form-control" placeholder="name@example.com" aria-describedby="emailHelp" @bind-Value="user.Email" @oninput="@((ChangeEventArgs __e) => emailInUse = false)" />
+        <label for="Email1" class="form-label">Email address</label>
+        <ValidationMessage For="@(()=>user.Email)" />
+        @if (emailInUse)
+        {
+            <p class="text-danger p-0 m-0">Email is already in used</p>
+        }
+        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    </div>
+    <div class="form-floating mb-3">
+        <InputText type="password" class="form-control" placeholder="WoWLeaked" @bind-Value="user.Password" />
+        <label for="Password" class="form-label">Password</label>
+        <ValidationMessage For="@(()=>user.Password)" />
+    </div>
+    <div class="form-floating mb-3">
+        <InputText type="password" class="form-control" placeholder="WoWLeaked" @bind-Value="user.PasswordConfirm" />
+        <label for="PasswordConfirm" class="form-label">Confirm Password</label>
+        <ValidationMessage For="@(()=>user.PasswordConfirm)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    bool emailInUse = false;
+    User user = new User();
+    
+    public EventCallback<ChangeEventArgs> ValueChanged { get; set; }
+    public async void HandleSubmit()
+    {
+        emailInUse = false;
+        var response = await Http.PostAsJsonAsync("api/User/new", user);
+        Console.WriteLine(response.IsSuccessStatusCode);
+        if (response.IsSuccessStatusCode)
+        {
+            User LoginUser = await response.Content.ReadFromJsonAsync<User>();
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "User", LoginUser.UserId);
+            //Nav.NavigateTo("/");
+        }
+        else
+        {
+            emailInUse = true;
+            StateHasChanged();
+        }
+    }
+}
