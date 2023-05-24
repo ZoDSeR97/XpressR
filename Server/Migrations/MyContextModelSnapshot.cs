@@ -206,7 +206,7 @@ namespace XpressR.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("Avatar")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -295,7 +295,7 @@ namespace XpressR.Server.Migrations
                         .IsRequired();
 
                     b.HasOne("XpressR.Shared.User", "Guest")
-                        .WithMany("RSVRs")
+                        .WithMany("Bookings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -338,9 +338,9 @@ namespace XpressR.Server.Migrations
 
             modelBuilder.Entity("XpressR.Shared.User", b =>
                 {
-                    b.Navigation("Properties");
+                    b.Navigation("Bookings");
 
-                    b.Navigation("RSVRs");
+                    b.Navigation("Properties");
                 });
 #pragma warning restore 612, 618
         }

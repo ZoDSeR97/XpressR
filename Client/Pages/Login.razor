@@ -1,11 +1,46 @@
 ﻿@page "/login"
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Nav
+@using XpressR.Shared
+
 
 <h3>Component</h3>
-<EditForm>
-
+<EditForm Model="user" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator/>
+    <div class="form-floating mb-3">
+        <InputText type="email" class="form-control" placeholder="name@example.com" aria-describedby="emailHelp" @bind-Value="user.Email" />
+        <label for="Email1" class="form-label">Email address</label>
+        <ValidationMessage For="@(()=>user.Email)" />
+        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    </div>
+    <div class="form-floating mb-3">
+        <InputText type="password" class="form-control" placeholder="WoWLeaked" @bind-Value="user.Password" />
+        <label for="Password1" class="form-label">Password</label>
+        <ValidationMessage For="@(()=>user.Password)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
 </EditForm>
+<p></p>
 
 @code {
+    private LoginUser user = new LoginUser();
+    User LoginUser = new User();
 
+    public async void HandleLogin()
+    {
+        var response = await Http.PostAsJsonAsync("api/User", user);
+        Console.WriteLine(response.IsSuccessStatusCode);
+        if(response.IsSuccessStatusCode)
+        {
+            LoginUser = await response.Content.ReadFromJsonAsync<User>();
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "User", LoginUser.UserId);
+            //Nav.NavigateTo("/");
+        }
+        else
+        {
+            var content = await response.Content.ReadFromJsonAsync<User>();
+            Console.WriteLine(content.Email);
+        }
+    }
 }
