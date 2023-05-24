@@ -1,5 +1,67 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+.logo {
+    width: 100px;
+}
+
+.globe-logo {
+    height: 20px;
+}
+
+.select-logos {
+    height: 28px;
+}
+
+.select-font-size {
+    font-size: smaller;
+}
+
+.brder {
+    border-bottom: 1px solid black;
+}
+
+.search {
+    width: 260px;
+}
+
+.dsplay {
+    width: 450px;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+}
+.btn-1{
+    color:crimson;
+}
+
+.pics {
+    width:100%;
+}
+
+.pics-2 {
+    height:235px;
+}
+
+.big-div {
+    max-width:1120px
+}
+
+.small-div{
+    width:40%;
+    overflow:hidden;
+    height:722px;
+}
+
+.icons {
+    width: 20px;
+}
+
+.icons-2 {
+    height: 30px;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -99,3 +161,6 @@ a, .btn-link {
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
     }
+
+
+
