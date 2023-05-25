@@ -40,19 +40,21 @@
     width:100%;
 }
 
-.pics-2 {
-    height:235px;
+.CIO {
+    width: 50%;
 }
+
 
 .big-div {
-    max-width:1120px
+    min-width:900px;
+    max-width:1250px;
 }
 
-.small-div{
-    width:40%;
-    overflow:hidden;
-    height:722px;
+#map {
+    height:500px;
+    width:100%;
 }
+
 
 .icons {
     width: 20px;
