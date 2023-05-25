@@ -11,7 +11,7 @@ using XpressR.Server.Models;
 namespace XpressR.Server.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20230524193335_FirstMigration")]
+    [Migration("20230524224901_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />

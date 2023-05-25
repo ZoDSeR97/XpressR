@@ -21,7 +21,7 @@
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </EditForm>
-<p></p>
+<p>Don't have an Account? <a class="btn btn-success" href="/registration">Register Here!</a></p>
 
 @code {
     private LoginUser user = new LoginUser();
@@ -37,10 +37,6 @@
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "User", LoginUser.UserId);
             //Nav.NavigateTo("/");
         }
-        else
-        {
-            var content = await response.Content.ReadFromJsonAsync<User>();
-            Console.WriteLine(content.Email);
-        }
+      
     }
 }
