@@ -2,6 +2,7 @@
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
 @using XpressR.Shared
 <h3>Registration</h3>
 
@@ -43,8 +44,7 @@
 @code {
     bool emailInUse = false;
     User user = new User();
-    
-    public EventCallback<ChangeEventArgs> ValueChanged { get; set; }
+
     public async void HandleSubmit()
     {
         emailInUse = false;
@@ -54,7 +54,8 @@
         {
             User LoginUser = await response.Content.ReadFromJsonAsync<User>();
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "User", LoginUser.UserId);
-            //Nav.NavigateTo("/");
+            await AuthStateProvider.GetAuthenticationStateAsync();
+            Nav.NavigateTo("/");
         }
         else
         {

@@ -14,6 +14,8 @@ namespace XpressR.Shared
 
         public int UserId { get; set; }
 
+        public string? Name { get; set; }
+
         [Required]
         [MinLength(5)]
         public string? Address { get; set; }
@@ -24,6 +26,10 @@ namespace XpressR.Shared
 
         [Required]
         public int Price { get; set; }
+
+        public string? Thumbnail { get; set; }
+
+        public string? Imgs { get; set; }
 
         public Boolean Room { get; set; } = false;
 

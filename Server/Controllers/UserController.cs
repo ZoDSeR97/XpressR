@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using XpressR.Server.Models;
 using XpressR.Shared;
+using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,9 +29,11 @@ namespace XpressR.Server.Controllers
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult Get(int id)
         {
-            return "value";
+            User? user = _context.Users.Include(u=>u.Properties).Include(u=>u.Bookings).ThenInclude(b=>b.Property).FirstOrDefault(record => record.UserId == id);
+            if (user != null) return Ok(user);
+            return BadRequest();
         }
 
         // POST api/<UserController>
@@ -41,7 +45,7 @@ namespace XpressR.Server.Controllers
                 User? userInDb = _context.Users.FirstOrDefault(record=>record.Email==loginInfo.Email);
                 if (userInDb == null) return NotFound("Invalid Information");
                 PasswordHasher<LoginUser> hasher = new PasswordHasher<LoginUser>();
-                var result = hasher.VerifyHashedPassword(loginInfo, userInDb.Password, loginInfo.Password);                                    // Result can be compared to 0 for failure        
+                var result = hasher.VerifyHashedPassword(loginInfo, userInDb.Password, loginInfo.Password); // Result can be compared to 0 for failure        
                 if (result == 0) return NotFound("Invalid Information");
                 return Ok(userInDb);
             }

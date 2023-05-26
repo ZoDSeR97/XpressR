@@ -1,0 +1,20 @@
+﻿@page "/checkout"
+@inject HttpClient Http
+@inject NavigationManager Nav
+@using XpressR.Shared
+
+<h3>Checkout</h3>
+
+<form action="/create-checkout-session" method="POST">
+    <button type="submit">Checkout</button>
+</form>
+
+@code {
+    RSVP booking = new RSVP();
+    public async void HandleSubmit()
+    {
+        var response = await Http.PostAsJsonAsync("api/Payment/create-checkout-session", booking);
+        string url = await response.Content.ReadAsStringAsync();
+        Nav.NavigateTo(url);
+    }
+}
