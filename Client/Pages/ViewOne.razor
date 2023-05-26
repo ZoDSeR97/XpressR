@@ -1,4 +1,4 @@
-﻿@page "/rooms"
+﻿@page "/rooms/{id:int}"
 @inject IJSRuntime JSRuntime
 @inject HttpClient Http
 @inject NavigationManager Nav
@@ -185,35 +185,36 @@
     Property? p;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-            /*if (id == null) Nav.NavigateTo("/");
-            var response = await Http.GetAsync($"api/Property/{id}");
-            if (response.IsSuccessStatusCode)
-            {
-            p = await response.Content.ReadFromJsonAsync<Property>();
-            booking.PropertyId = p.PropertyId;
-            string UserId = JSRuntime.InvokeAsync<string>("localStorage.getItem", "User");
-                int id = int.Parse(UserId);
-                if (id > 0)
-                {
-                booking.UserId = int.Parse(UserId);
-            }
-            }
-            else
-            {
-            Nav.NavigateTo("/");
-        }*/
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("initMap", "1151 Scott Lake Rd, Waterford, MI 48328");
+            if (id == null) Nav.NavigateTo("/");
+            var response = await Http.GetAsync($"api/Property/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                p = await response.Content.ReadFromJsonAsync<Property>();
+                booking.PropertyId = p.PropertyId;
+                Console.WriteLine(p.PropertyId);
+                string UserId = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "User");
+                int id = int.Parse(UserId);
+                if (id > 0)
+                {
+                    booking.UserId = int.Parse(UserId);
+                }
+            }
         }
     }
 
     public async void HandleSubmit()
     {
-        var response = await Http.PostAsJsonAsync("api/Payment", booking);
+        var response = await Http.PostAsJsonAsync("api/Payment/create-checkout-session", booking);
         if (response.IsSuccessStatusCode)
         {
             Nav.NavigateTo(await response.Content.ReadAsStringAsync());
+        }
+        else
+        {
+            Console.WriteLine("Something is Wrong");
         }
     }
 

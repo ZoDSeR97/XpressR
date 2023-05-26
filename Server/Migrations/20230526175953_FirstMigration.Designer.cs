@@ -11,7 +11,7 @@ using XpressR.Server.Models;
 namespace XpressR.Server.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20230524224901_FirstMigration")]
+    [Migration("20230526175953_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -89,10 +89,21 @@ namespace XpressR.Server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Imgs")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -105,11 +116,19 @@ namespace XpressR.Server.Migrations
                     b.Property<bool>("SharedRoom")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("Thumbnail")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Zip")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("varchar(5)");
 
                     b.HasKey("PropertyId");
 

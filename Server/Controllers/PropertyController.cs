@@ -23,11 +23,18 @@ namespace XpressR.Server.Controllers
             return new string[] { "value1", "value2" };
         }
 
+        // GET: api/<PropertyController>/all
+        [HttpGet("all")]
+        public ActionResult GetAll()
+        {
+            return Ok(_context.Properties.ToList());
+        }
+
         // GET api/<PropertyController>/5
         [HttpGet("{id}")]
         public ActionResult<Property> Get(int id)
         {
-            Property? p = _context.Properties.Include(record=>record.Owner).FirstOrDefault(p => p.PropertyId == id);
+            Property? p = _context.Properties.FirstOrDefault(p => p.PropertyId == id);
             if (p!=null) return Ok(p);
             return BadRequest();
         }

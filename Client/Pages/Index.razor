@@ -1,4 +1,6 @@
 ﻿@page "/"
+@inject HttpClient Http
+@using XpressR.Shared
 
 <PageTitle>Home</PageTitle>
 
@@ -60,17 +62,48 @@
     <div class="text-center">
         <input type="text" placeholder="Display total price | Includes all fees, before taxes" class="rounded-3 p-3 dsplay" />
     </div>
-    <div class="row mt-4 ">
+    <div class="row mt-4 text-center">
+        @foreach (Property p in Properties)
+        {
+            <a class="col mx-4" href=@($"/rooms/{p.PropertyId}")>
+                <img src="@p.Thumbnail" />
+                <p class="fw-bold mt-2">Ocean City, Maryland</p>
+                <p>@p.Address</p>
+                <p>@p.City</p>
+                <p>@p.Zip</p>
+                <p class="fw-bold">$@p.Price night</p>
+            </a>
+        }
+        <!--
         @for (int i =0; i<10; i++)
         {
-            <a class="col-3" href="/rooms">
+           /*
+            <a class="col mx-4" href="/rooms">
                 <img src="/static/Houses/OceanCity_MD.png" alt="OceanCity" />
                 <p class="fw-bold mt-2">Ocean City, Maryland</p>
                 <p>On Ocean City Beach</p>
                 <p>Aug 26-31</p>
                 <p class="fw-bold">$785 night</p>
             </a>
+            */
         }
+        -->
     </div>
 </div>
-<AuthorizeView></AuthorizeView>
+
+@code{
+    List<Property> Properties = new List<Property>();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var response = await Http.GetAsync("api/Property/all");
+        if (response.IsSuccessStatusCode)
+        {
+            Properties = await response.Content.ReadFromJsonAsync<List<Property>>();
+            StateHasChanged();
+        }
+        else
+        {
+            Console.WriteLine("Something is wrong");
+        }
+    }
+}

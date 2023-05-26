@@ -23,6 +23,8 @@ namespace XpressR.Server.Controllers
         public ActionResult CreateCheckoutSession(RSVP reservation)
         {
             Property? p = _context.Properties.FirstOrDefault(p => p.PropertyId == reservation.PropertyId);
+            Console.WriteLine(reservation.PropertyId);
+            Console.WriteLine($"Got HERE {p.Price}");
             if (p != null)
             {
                 var options = new SessionCreateOptions
@@ -34,28 +36,28 @@ namespace XpressR.Server.Controllers
                       {
                         PriceData = new SessionLineItemPriceDataOptions
                         {
-                          UnitAmount = p.Price*(int)(reservation.CheckOut-reservation.CheckIn).TotalDays,
+                          UnitAmount = p.Price*100*5,
                           Currency = "usd",
                           ProductData = new SessionLineItemPriceDataProductDataOptions
                           {
                             Name = p.Name,
-                            Images = new List<string> {p.Thumbnail??""}
                           },
                         },
-                        Quantity = (long)(reservation.CheckOut-reservation.CheckIn).TotalDays,
+                        Quantity = 1,
                       },
                     },
                     Mode = "payment",
-                    SuccessUrl = "http://localhost:5080/success",
+                    SuccessUrl = "http://localhost:5080/trips",
                     CancelUrl = "http://localhost:5080/",
                 };
+                Console.WriteLine(options);
                 var service = new SessionService();
                 Session session = service.Create(options);
 
                 return Ok(session.Url);
             }
 
-            return new StatusCodeResult(303);
+            return BadRequest();
         }
 
         // GET: api/<PaymentController>

@@ -1,5 +1,6 @@
 ﻿@inject IJSRuntime JSRuntime
 @inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Nav
 
 <nav class="d-flex justify-content-between brder">
     <a href="/"><img src="static/img/airbnb-logo2.png" class="logo" /></a>
@@ -7,22 +8,42 @@
         <input type="text" placeholder="Anywhere | Any Week | Add Guests" class="rounded-pill search p-2" />
     </div>
     <div class="d-flex mt-3">
-        <AuthorizeView>
-            <NotAuthorized>
-                <a class="btn btn-danger" href="/login">Login</a>
-            </NotAuthorized>
-            <Authorized>
-                <a class="btn btn-danger" @onclick="Logout">Logout</a>
-            </Authorized>
-        </AuthorizeView>
-        <p class="me-3">Airbnb your home</p>
-        <img src="static/img/globe.png" class="globe-logo" />
+        <button @onfocusout="ShowBasic" @onfocus="()=>UserMenu=true">
+            <img src="static/img/globe.png" class="globe-logo" />
+            @if (UserMenu)
+            {
+                <div>
+                    <AuthorizeView>
+                        <NotAuthorized>
+                            <div class="btn btn-danger" @onclick='(()=>GoTo("/login"))'>Log in</div>
+                            <div class="btn btn-danger" @onclick='(()=>GoTo("/registration"))'>Sign up</div>
+                        </NotAuthorized>
+                        <Authorized>
+                            <div class="btn btn-danger" @onclick='(()=>GoTo("/trips"))'>Trips</div>
+                            <div class="btn btn-danger" @onclick="Logout">Logout</div>
+                        </Authorized>
+                    </AuthorizeView>
+                    <div class="btn btn-danger" @onclick='(()=>GoTo("/property"))'>Airbnb your home</div>
+                </div>
+            }
+        </button>
     </div>
 </nav>
 @code{
+    bool UserMenu = false;
     public async void Logout()
     {
         await JSRuntime.InvokeVoidAsync("localStorage.clear", null);
         await AuthStateProvider.GetAuthenticationStateAsync();
+        Nav.NavigateTo("/");
+    }
+    public void ShowBasic()
+    {
+        UserMenu = !UserMenu;
+    }
+
+    public void GoTo(string url)
+    {
+        Nav.NavigateTo(url);
     }
 }

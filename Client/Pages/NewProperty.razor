@@ -1,0 +1,82 @@
+﻿@page "/property"
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Nav
+@using XpressR.Shared;
+
+<AuthorizeView>
+    <Authorized>
+        <h3>NewProperty</h3>
+        <EditForm Model="p" OnValidSubmit="HandleSubmit" Context="Login">
+            <DataAnnotationsValidator/>
+            <div class="form-floating mb-3">
+                <InputText class="form-control" placeholder="Kaching" @bind-Value="p.Name" />
+                <label for="Name" class="form-label">Name of the Property</label>
+                <ValidationMessage For="@(()=>p.Name)"/>
+            </div>
+            <div class="form-floating mb-3">
+                <InputNumber type="Number" class="form-control" placeholder="12 SW Ave" @bind-Value="p.Price" />
+                <label for="Price" class="form-label">Price per night</label>
+                <ValidationMessage For="@(()=>p.Price)" />
+            </div>
+            <div class="row">
+                <div class="col form-floating mb-3">
+                    <InputText class="form-control" placeholder="12 SW Ave" @bind-Value="p.Address" />
+                    <label for="Address" class="form-label">Address</label>
+                    <ValidationMessage For="@(()=>p.Address)" />
+                </div>
+                <div class="col form-floating mb-3">
+                    <InputText type="Number" class="form-control" placeholder="99999" @bind-Value="p.Zip" />
+                    <label for="Zip" class="form-label">Zip code</label>
+                    <ValidationMessage For="@(()=>p.Zip)" />
+                </div>
+                <div class="col form-floating mb-3">
+                    <InputText class="form-control" placeholder="Long Horn" @bind-Value="p.City" />
+                    <label for="City" class="form-label">City</label>
+                    <ValidationMessage For="@(()=>p.City)" />
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                <InputTextArea type="email" class="form-control" placeholder="This place is fantastic" @bind-Value="p.Description"/>
+                <label for="Description" class="form-label">Description</label>
+                <ValidationMessage For="@(()=>p.Description)" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText class="form-control" placeholder="12 SW Ave" @bind-Value="p.Thumbnail" />
+                <label for="Thumbnail" class="form-label">Thumbnail</label>
+                <ValidationMessage For="@(()=>p.Thumbnail)" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText class="form-control" placeholder="12 SW Ave" @bind-Value="p.Imgs" />
+                <label for="Imgs" class="form-label">Images</label>
+                <ValidationMessage For="@(()=>p.Imgs)" />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        <p>First Step is to <a class="btn bg-danger" href="/login">Login</a></p>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    Property p = new Property();
+
+    public async void HandleSubmit()
+    {
+        string UserId = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "User");
+        int id = int.Parse(UserId);
+        if (id <= 0) Nav.NavigateTo("/oopsie");
+        p.UserId = id;
+        var response = await Http.PostAsJsonAsync("api/Property/new", p);
+        if (response.IsSuccessStatusCode)
+        {
+            Nav.NavigateTo("/");
+        }
+        else
+        {
+            Console.WriteLine("Something is wrong");
+        }
+    }
+}
