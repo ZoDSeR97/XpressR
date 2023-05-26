@@ -44,6 +44,9 @@
     width: 50%;
 }
 
+.trips-pic{
+    width:1000px;
+}
 
 .big-div {
     min-width:900px;
@@ -58,6 +61,10 @@
 
 .icons {
     width: 20px;
+}
+
+.icons-1 {
+    width:50px;
 }
 
 .icons-2 {
