@@ -1,5 +1,8 @@
 ﻿@page "/rooms"
 @inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@inject NavigationManager Nav
+@using XpressR.Shared
 
 <PageTitle>Counter</PageTitle>
 
@@ -106,7 +109,7 @@
     </div>
 </div>
     <div class="col">
-    <div class="border side p-5 mt-5">    
+    <EditForm Model="booking" OnValidSubmit="HandleSubmit" class="border side p-5 mt-5">    
         <div class="d-flex justify-content-between">
             <h3>$786 night</h3>
             <p><img class="icons" src="/static/ViewOne_img/star.png" alt="Star" /> 4.84 | 100 Reviews </p>
@@ -114,7 +117,7 @@
             <div class="border d-flex ">
                 <div class="border-end p-2 CIO">
                     <p class="fw-bold">CHECK-IN</p>
-                    <p >8/26/2023</p>
+                    <p>8/26/2023</p>
                 </div> 
                 <div class="p-2 CIO">
                     <p class="fw-bold">CHECK-OUT</p>
@@ -131,8 +134,16 @@
                 </select>
             </div>
             <div class="text-center">
-            <button class="btn btn-danger mt-1">Reserve</button>
-            <p>You won't be charged yet</p>
+            <AuthorizeView>
+                <Authorized Context="login">
+                    <button class="btn btn-danger mt-1">Reserve</button>
+                    <p>You won't be charged yet</p>
+                </Authorized>
+                <NotAuthorized Context="notlogin">
+                    <a class="btn btn-danger mt-1" href="/login">Login</a>
+                    <p>Login to book your place</p>
+                </NotAuthorized>
+            </AuthorizeView>
             </div>
             <div class="d-flex justify-content-between">
                 <p class="text-decoration-underline">$786 x 5 nights</p>
@@ -150,7 +161,7 @@
                 <p class="fw-bold">Total before taxes</p>
                 <p>$4,666</p>
             </div>
-        </div>
+        </EditForm>
         </div>
     </div>
     <div id="map"></div>
@@ -168,11 +179,41 @@
 
 
 @code {
+    [Parameter]
+    public int? id { get; set; } = null;
+    RSVP booking = new RSVP();
+    Property? p;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+            /*if (id == null) Nav.NavigateTo("/");
+            var response = await Http.GetAsync($"api/Property/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+            p = await response.Content.ReadFromJsonAsync<Property>();
+            booking.PropertyId = p.PropertyId;
+            string UserId = JSRuntime.InvokeAsync<string>("localStorage.getItem", "User");
+                int id = int.Parse(UserId);
+                if (id > 0)
+                {
+                booking.UserId = int.Parse(UserId);
+            }
+            }
+            else
+            {
+            Nav.NavigateTo("/");
+        }*/
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("initMap", "New York City");
+            await JSRuntime.InvokeVoidAsync("initMap", "1151 Scott Lake Rd, Waterford, MI 48328");
+        }
+    }
+
+    public async void HandleSubmit()
+    {
+        var response = await Http.PostAsJsonAsync("api/Payment", booking);
+        if (response.IsSuccessStatusCode)
+        {
+            Nav.NavigateTo(await response.Content.ReadAsStringAsync());
         }
     }
 

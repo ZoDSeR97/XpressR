@@ -2,8 +2,6 @@
 
 <PageTitle>Home</PageTitle>
 
-
-
 <div class="container-fluid">
     <div class="mt-5 d-flex text-center justify-content-between">
         <div>
@@ -65,13 +63,14 @@
     <div class="row mt-4 ">
         @for (int i =0; i<10; i++)
         {
-        <div class="col-3">
-            <img src="/static/Houses/OceanCity_MD.png" alt="OceanCity" />
-            <p class="fw-bold mt-2">Ocean City, Maryland</p>
-            <p>On Ocean City Beach</p>
-            <p>Aug 26-31</p>
-            <p class="fw-bold">$785 night</p>
-        </div>
+            <a class="col-3" href="/rooms">
+                <img src="/static/Houses/OceanCity_MD.png" alt="OceanCity" />
+                <p class="fw-bold mt-2">Ocean City, Maryland</p>
+                <p>On Ocean City Beach</p>
+                <p>Aug 26-31</p>
+                <p class="fw-bold">$785 night</p>
+            </a>
         }
     </div>
 </div>
+<AuthorizeView></AuthorizeView>

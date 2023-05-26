@@ -2,6 +2,7 @@
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
 @using XpressR.Shared
 
 
@@ -34,9 +35,9 @@
         if(response.IsSuccessStatusCode)
         {
             LoginUser = await response.Content.ReadFromJsonAsync<User>();
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "User", LoginUser.UserId);
-            //Nav.NavigateTo("/");
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "User", (int)LoginUser.UserId);
+            await AuthStateProvider.GetAuthenticationStateAsync();
+            Nav.NavigateTo("/");
         }
-      
     }
 }
