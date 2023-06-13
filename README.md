@@ -38,3 +38,4 @@ $ dotnet run
 
 ## Planned to implement
 - Socket
+- File upload
