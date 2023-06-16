@@ -31,3 +31,11 @@ $ cd folder_name # cd into folder directory where .cs files are
 $ dotnet restore # Restore the dependencies and tools of a project
 $ dotnet run
 ```
+
+## API implemented
+- Stripe for checkout
+- Google Map
+
+## Planned to implement
+- Socket
+- File upload
