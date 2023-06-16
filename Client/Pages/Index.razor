@@ -67,32 +67,18 @@
         {
             <a class="col mx-4" href=@($"/rooms/{p.PropertyId}")>
                 <img src="@p.Thumbnail" />
-                <p class="fw-bold mt-2">Ocean City, Maryland</p>
+                <p class="fw-bold mt-2">@p.Name</p>
                 <p>@p.Address</p>
                 <p>@p.City</p>
                 <p>@p.Zip</p>
                 <p class="fw-bold">$@p.Price night</p>
             </a>
         }
-        <!--
-        @for (int i =0; i<10; i++)
-        {
-           /*
-            <a class="col mx-4" href="/rooms">
-                <img src="/static/Houses/OceanCity_MD.png" alt="OceanCity" />
-                <p class="fw-bold mt-2">Ocean City, Maryland</p>
-                <p>On Ocean City Beach</p>
-                <p>Aug 26-31</p>
-                <p class="fw-bold">$785 night</p>
-            </a>
-            */
-        }
-        -->
     </div>
 </div>
 
 @code{
-    List<Property> Properties = new List<Property>();
+    List<Property>? Properties = new List<Property>();
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         var response = await Http.GetAsync("api/Property/all");

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using XpressR.Server.Models;
 using XpressR.Shared;
 
@@ -34,8 +35,12 @@ namespace XpressR.Server.Controllers
         [HttpGet("{id}")]
         public ActionResult<Property> Get(int id)
         {
-            Property? p = _context.Properties.FirstOrDefault(p => p.PropertyId == id);
-            if (p!=null) return Ok(p);
+            Property? p = _context.Properties.Include(p=>p.Owner).FirstOrDefault(p => p.PropertyId == id);
+            string json = JsonConvert.SerializeObject(p, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            if (p!=null) return Ok(json);
             return BadRequest();
         }
 

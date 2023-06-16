@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace XpressR.Shared
@@ -23,13 +24,17 @@ namespace XpressR.Shared
         public string? Address { get; set; }
 
         [Required]
+        [MinLength(3)]
+        public string? City { get; set; }
+
+        [Required]
+        [MinLength(2)]
+        public string? State { get; set; }
+
+        [Required]
         [MinLength(5)]
         [MaxLength(5)]
         public string? Zip { get; set; }
-
-        [Required]
-        [MinLength(3)]
-        public string? City { get; set; }
 
         [Required]
         [MinLength(5)]
@@ -46,11 +51,13 @@ namespace XpressR.Shared
 
         public Boolean SharedRoom { get; set; } = false;
 
-        //Navigation Property
-        public User? Owner { get; set; }
-        public List<RSVP> Guests { get; set; } = new List<RSVP>();
-
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set;} = DateTime.Now;
+        //Navigation Property
+        
+        public User? Owner { get; set; }
+        
+        public List<RSVP> Guests { get; set; } = new List<RSVP>();
+
     }
 }
